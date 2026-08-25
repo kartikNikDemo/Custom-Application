@@ -1,5 +1,7 @@
 package com.smart.config;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -133,7 +135,11 @@ public class MainConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000"); // Allow frontend
+       // configuration.addAllowedOrigin("http://localhost:3000"); // Allow frontend
+        configuration.setAllowedOrigins(List.of(
+        	    "http://localhost:3000",
+        	    "https://custom-application-react.vercel.app"
+        	));
         configuration.addAllowedMethod("*"); // Allow all HTTP methods
         configuration.addAllowedHeader("*"); // Allow all headers
         configuration.setAllowCredentials(true); // Allow credentials (cookies, etc.)
