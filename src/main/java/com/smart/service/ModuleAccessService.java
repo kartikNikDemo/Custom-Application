@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smart.entity.ModuleAccess;
 import com.smart.helper.service.CurrentUserService;
 import com.smart.repository.ModuleAccessRepository;
@@ -20,15 +21,29 @@ public class ModuleAccessService {
 
 	public ModuleAccess createModuleAccess(ModuleAccess moduleAccess) {
 		
+		ModuleAccess moduleAcces=moduleAccessRepository.findByCompanyIdAndModuleIdAndUserId(currentUserService.getCurrentUser().getCompanyId(),moduleAccess.getModuleId(),moduleAccess.getUserId());	
+		
+		  if (moduleAcces != null) {
+		        throw new RuntimeException("Module access already exists for this user.");
+		    }
 		return moduleAccessRepository.save(moduleAccess);
 	}
 	
 
 	public ModuleAccess updateModuleAccess(ModuleAccess moduleAccess) {
-		     
-	ModuleAccess saved=  	 moduleAccessRepository.save(moduleAccess);
+		 
+		ModuleAccess moduleAccesExists=moduleAccessRepository.findByCompanyIdAndModuleIdAndUserId(currentUserService.getCurrentUser().getCompanyId(),moduleAccess.getModuleId(),moduleAccess.getUserId());
+		if (moduleAccesExists != null) {
+		moduleAccesExists.setCanCreate(moduleAccess.isCanCreate());
+		moduleAccesExists.setCanDelete(moduleAccess.isCanDelete());
+		moduleAccesExists.setCanEdit(moduleAccess.isCanEdit());
+		moduleAccesExists.setCanView(moduleAccess.isCanView());
+		moduleAccesExists.setCanViewAll(moduleAccess.isCanViewAll());
+		return moduleAccessRepository.save(moduleAccesExists);
+		}
 		
-		return getById(saved.getId());
+		
+		return moduleAccessRepository.save(moduleAccess);
 	}
 
 
