@@ -93,6 +93,10 @@ public class MainConfig {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
             .authorizeHttpRequests(auth -> auth
+            		 .requestMatchers(
+            			        org.springframework.http.HttpMethod.OPTIONS,
+            			        "/**"
+            			    ).permitAll()
             	 .requestMatchers("/super/**").hasRole("SUPERADMIN")
                 .requestMatchers(
                         "/signin",
@@ -100,7 +104,8 @@ public class MainConfig {
                         "/send_otp",
                         "/verify_o",
                         "/change_password",
-                        "/public/**"
+                        "/public/**",
+                        "/health"
                 ).permitAll()
 
                 .anyRequest().authenticated()
