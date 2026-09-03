@@ -53,7 +53,11 @@ public class HomeController {
     
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    
+
+   @GetMapping("/health")
+    public String health() {
+        return "OK";
+    }
 
     @GetMapping("/")
     public String welcome() {
