@@ -98,6 +98,7 @@ public class MainConfig {
             			        "/**"
             			    ).permitAll()
             	 .requestMatchers("/super/**").hasRole("SUPERADMIN")
+            	 .requestMatchers("/actuator/health").permitAll()
                 .requestMatchers(
                         "/signin",
                         "/register",
