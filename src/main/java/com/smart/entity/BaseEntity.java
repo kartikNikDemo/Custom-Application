@@ -60,14 +60,20 @@ public abstract class BaseEntity {
 	@PrePersist
 	public void setCreatorId() {
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.isAuthenticated()) {
+	    Authentication authentication =
+	            SecurityContextHolder.getContext().getAuthentication();
 
-			CustomUserDetail user = (CustomUserDetail) authentication.getPrincipal();
+	    if (authentication == null ||
+	        !authentication.isAuthenticated() ||
+	        authentication.getPrincipal() instanceof String) {
+	        return;
+	    }
 
-			this.creatorId = user.getUser().getId();
-			this.companyId = user.getUser().getCompanyId();
-		}
+	    if (authentication.getPrincipal() instanceof CustomUserDetail user) {
+
+	        this.creatorId = user.getUser().getId();
+	        this.companyId = user.getUser().getCompanyId();
+	    }
 	}
 
 }
